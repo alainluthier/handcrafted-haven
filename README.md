@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Introduction 
+Team Project for WDD 430 Full Stack Development BYUI
 
-## Getting Started
+Name: Handcrafted Haven
 
-First, run the development server:
+# Sumary
+Handcrafted Haven is a web application to provide artisans to showcase and sell their handcrafted items like a virtual marketplace
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Functions:
+- Seller (Artisan) profiles with authentication to: show thier hadcrafted items.
+- Product Listings: Non authenticated users cand list items for sale with descriptions, pricing and images.
+- Users can browse items by category, price range, artisan and they can lave a review and ratings
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#Purpose
+create "Handcrafted Haven," an innovative web application serving as a virtual marketplace for artisans and crafters. The primary goals are to connect creators with customers, foster a sense of community, and promote sustainable consumption.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#Theme
+Colors: https://coolors.co/f58300-28262c-ebf2fa-97ce5c-fff6b5
+Fonts: Merienda, Sans Serif
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Project Members
+1.	Fernando Gonzales
+2.	Anelisa Ferreira
+3.	Alain Catari
+4.	Ojukwu Ifeanyi
 
-## Learn More
+#URL Repository
+https://dev.azure.com/alainluthier/_git/WDD430-Group06-Project
 
-To learn more about Next.js, take a look at the following resources:
+#Board Repository
+https://dev.azure.com/alainluthier/WDD430-Group06-Project/_workitems/recentlyupdated/
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#Ideas
+[21:57] Ferreira, Anelisa
+ 
+>>> Initialize Project Structure:
+•   Create a new project repository on Azure DevOps Repo.
+•   Set up a basic directory structure for front-end and back-end code.
+ 
+>>> Set Up Development Environment:
+•   Install and configure Node.js for the back-end development environment.
+•   Set up a React/Next.js project for the front-end development environment.
+ 
+>>> Design Seller Profile Page:
+•   Create wireframes and design mockups for the seller profile page.
+•   Implement the seller profile page layout using HTML/CSS.
+ 
+>>> Implement Seller Authentication:
+•   Set up authentication mechanisms for sellers.
+•   Integrate authentication with the seller profile creation process.
+ 
+>>> Develop Product Listing Feature:
+•   Design the layout for displaying handcrafted items on the front end.
+•   Implement back-end functionality for adding and retrieving product listings.
+ 
+>>> Enable User Reviews and Ratings:
+•   Design the user interface for leaving reviews and ratings.
+•   Implement the back-end functionality to store and retrieve reviews.
+ 
+>>> Implement Responsive Design:
+•   Ensure that the application is responsive across various devices.
+•   Test and fix any layout issues on smartphones, tablets, and desktops.
+ 
+>>> Enforce Security Measures:
+•   Implement secure practices for handling user inputs.
+•   Perform security testing to identify and address vulnerabilities.
+ 
+>>> Accessibility Testing:
+•   Conduct accessibility testing to ensure compliance with WCAG 2.1, Level AA.
+•   Address any accessibility issues identified during testing.
+ 
+>>> Set Up Deployment Pipeline:
+•   Configure Vercel for continuous deployment.
+•   Create a deployment pipeline that triggers on code changes.
