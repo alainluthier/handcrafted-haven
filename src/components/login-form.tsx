@@ -2,6 +2,8 @@
 
 import { Button } from "./button";
 import { useFormState, useFormStatus } from 'react-dom';
+import Link from "next/link";
+import { authenticate } from '@/app/lib/actions';
 
 import {
     AtSymbolIcon,
@@ -10,13 +12,12 @@ import {
     ArrowRightIcon
   } from '@heroicons/react/24/outline';
 export default function LoginForm() {
-  //const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   return (
-    //<form action={dispatch} className="space-y-3"></form>
-    <form className="space-y-3">
+    <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className="mb-3 text-2xl">
-          Handcract - Log in
+          Handcrafted Heaven - Log in
         </h1>
         <div className="w-full">
           <div>
@@ -60,18 +61,20 @@ export default function LoginForm() {
           </div>
         </div>
         <LoginButton />
+        <p className="text-sm mt-4 font-light text-gray-500 dark:text-gray-400">
+          You do not have an account? <Link href="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
+        </p>
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
           aria-atomic="true"
         >
-          {//errorMessage && (
+          {errorMessage && (
             <>
-              <p className="text-sm text-red-500">{//errorMessage
-              }</p>
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+              <p className="text-sm text-red-500">{errorMessage}</p>
             </>
-          //)
-          }
+          )}
         </div>
       </div>
     </form>

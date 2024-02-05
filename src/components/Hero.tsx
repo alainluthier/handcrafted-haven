@@ -2,7 +2,8 @@
 import React from 'react';
 import { CustomButton } from '.';
 import Image from 'next/image'; 
-
+import Link from 'next/link';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Hero = () => {
   const handleScroll = () => {}
@@ -15,12 +16,12 @@ const Hero = () => {
         <p className="hero__subtitle">
           We provide a platform for artisans and crafters to showcase and sell their unique handcrafted items.
         </p>
-        
-        <CustomButton
-        title= "Login"
-        containerStyles="bg-primary-blue text-white rounded-full mt-10" 
-        handleClick ={handleScroll}
-        />
+        <Link
+            href="/login"
+            className="flex items-center w-36 gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+          >
+            <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
+          </Link>
       </div>
 
       <div className="hero__image-container">
