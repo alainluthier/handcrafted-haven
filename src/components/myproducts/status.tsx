@@ -14,7 +14,7 @@ export default function ProductStatus({ status }: { status: boolean }) {
     >
       {status === false ? (
         <>
-          Don't Published
+          No Published
           <ClockIcon className="ml-1 w-4 text-gray-500" />
         </>
       ) : null}

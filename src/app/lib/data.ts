@@ -4,10 +4,9 @@ import {
     Item
   } from './definitions';
   const ITEMS_PER_PAGE = 6;
-import type { Session } from "next-auth";
   export async function fetchFilteredProducts(
     query: string,
-    session:Session|null,
+    userid:string,
     currentPage: number,
   ) {
     noStore();
@@ -25,7 +24,7 @@ import type { Session } from "next-auth";
           published
         FROM items
         WHERE
-          artisan_id= ${`${session?.user?.id}`} AND (
+          artisan_id= ${`${userid}`} AND (
           category ILIKE ${`%${query}%`} OR
           name ILIKE ${`%${query}%`} OR
           description ILIKE ${`%${query}%`} )
@@ -40,13 +39,13 @@ import type { Session } from "next-auth";
     }
   }
 
-  export async function fetchProductsPages(query: string,session: Session|null) {
+  export async function fetchProductsPages(query: string,userid: string) {
     noStore();
     try {
       const count = await sql`SELECT COUNT(*)
       FROM items
       WHERE
-        artisan_id= ${`${session?.user?.id}`} AND (
+        artisan_id= ${`${userid}`} AND (
         category ILIKE ${`%${query}%`} OR
         name ILIKE ${`%${query}%`} OR
         description ILIKE ${`%${query}%`} )

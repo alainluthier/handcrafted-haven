@@ -2,19 +2,18 @@ import Image from 'next/image';
 import { UpdateProduct, DeleteProduct } from '@/components/myproducts/buttons';
 import { fetchFilteredProducts } from '@/app/lib/data';
 import { formatCurrency } from '@/app/lib/utils';
-import type { Session } from "next-auth";
 import ProductStatus from './status';
 
 export default async function InvoicesTable({
   query,
-  session,
+  userid,
   currentPage,
 }: {
   query: string;
-  session: Session|null;
+  userid: string;
   currentPage: number;
 }) {
-  const products = await fetchFilteredProducts(query,session, currentPage);
+  const products = await fetchFilteredProducts(query,userid, currentPage);
 
   return (
     <div className="mt-6 flow-root">
