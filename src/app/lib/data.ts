@@ -24,7 +24,7 @@ import {
           published
         FROM items
         WHERE
-          artisan_id= ${`${userid}`} AND (
+          artisan_id::text = ${`${userid}`} AND (
           category ILIKE ${`%${query}%`} OR
           name ILIKE ${`%${query}%`} OR
           description ILIKE ${`%${query}%`} )
@@ -45,7 +45,7 @@ import {
       const count = await sql`SELECT COUNT(*)
       FROM items
       WHERE
-        artisan_id= ${`${userid}`} AND (
+        artisan_id::text= ${`${userid}`} AND (
         category ILIKE ${`%${query}%`} OR
         name ILIKE ${`%${query}%`} OR
         description ILIKE ${`%${query}%`} )
