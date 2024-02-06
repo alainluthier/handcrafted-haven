@@ -13,6 +13,7 @@ import {
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   
     try {
+        console.log(userid);
       const products = await sql<Item>`
         SELECT
           id,

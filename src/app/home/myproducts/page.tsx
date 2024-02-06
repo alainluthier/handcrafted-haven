@@ -18,6 +18,7 @@ export default async function Page({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const session = await auth();
+  console.log(session);
   const totalPages = await fetchProductsPages(query,session?.user?.id||'-');
   
   return (
@@ -26,7 +27,7 @@ export default async function Page({
         <h1 className="">My Products</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search invoices..." />
+        <Search placeholder="Search products..." />
         <CreateProduct />
       </div>
        <Suspense key={query + currentPage} fallback={<ProductsTableSkeleton />}>
