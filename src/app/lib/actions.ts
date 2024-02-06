@@ -29,14 +29,14 @@ const UserSchema = z.object({
 
 
 export async function createUser(formData: FormData) {
-  const{email,password,role,name} = UserSchema.parse({
+  const { email, password, role, name } = UserSchema.parse({
     email: formData.get('email'),
     password: formData.get('password'),
     confirmPassword: formData.get('confirm-password'),
     role: formData.get('type'),
     name: formData.get('name')
   })
-  const hashedPassword = await bcrypt.hash(password,10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   await sql`
   INSERT INTO users_ (email, role,password,name)
   VALUES (${email}, ${role}, ${hashedPassword}, ${name})
@@ -46,20 +46,30 @@ export async function createUser(formData: FormData) {
 }
 
 export async function authenticate(
-    prevState: string | undefined,
-    formData: FormData,
-  ) {
-    try {
-      await signIn('credentials', formData);
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return 'Invalid credentials.';
-          default:
-            return 'Something went wrong.';
-        }
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
       }
-      throw error;
     }
+    throw error;
   }
+}
+
+export async function deleteProduct(id: string) {
+  try {
+    await sql`DELETE FROM items WHERE id = ${id}`;
+    revalidatePath('/home/myproducts');
+    return { message: 'Deleted Product' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Product' };
+  }
+}
