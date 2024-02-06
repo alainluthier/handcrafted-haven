@@ -1,7 +1,7 @@
 export type User = {
     id: string;
     email: string;
-    role: string;
+    role: 'customer'|'artisan';
     password: string;
     name: string;
     image_url: string;
