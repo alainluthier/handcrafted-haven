@@ -4,7 +4,7 @@ import { fetchFilteredProducts } from '@/app/lib/data';
 import { formatCurrency } from '@/app/lib/utils';
 import ProductStatus from './status';
 
-export default async function InvoicesTable({
+export default async function ProductsTable({
   query,
   userid,
   currentPage,
