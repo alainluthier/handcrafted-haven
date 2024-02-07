@@ -1,6 +1,17 @@
 import type { NextAuthConfig } from 'next-auth';
 import { DefaultSession } from 'next-auth';
-import { User as NextUser } from 'next-auth';
+import { User } from './app/lib/definitions';
+import { sql } from '@vercel/postgres';
+
+export async function getUser(email: string): Promise<User | undefined> {
+  try {
+    const user = await sql<User>`SELECT * FROM users_ WHERE email=${email}`;
+    return user.rows[0];
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}
 
 declare module "next-auth" {
   interface Session {
@@ -30,8 +41,16 @@ export const authConfig = {
       }
       return true;
     },
-    jwt({ token, user }) {
-      if (user) token.user = user;
+    async jwt({ token, user }) {
+      if (user) {
+        if(user.email!=null){
+          console.log(user.email)
+          token.user = await getUser(user.email|| '')
+        }else{
+          token.user=user;
+        }
+        //
+      }
       return token;
     },
     session(sessionArgs) {
@@ -40,9 +59,10 @@ export const authConfig = {
      if ("token" in sessionArgs) {
         let session = sessionArgs.session;
         if ("user" in sessionArgs.token) {
-          const tokenUser = sessionArgs.token.user as NextUser;
+          const tokenUser = sessionArgs.token.user as User;
           if (tokenUser.id) {
             session.user.id = tokenUser.id;
+            session.user.role = tokenUser.role;
             return session;
           }
         }
