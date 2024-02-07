@@ -8,6 +8,69 @@ import { signIn } from '../../auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
 
+const ProductSchema = z.object({
+  id:z.string(),
+  name:z.string(),
+  category:z.string(),
+  description:z.string(),
+  price:z.number(),
+  image_url:z.string(),
+  published:z.boolean(),
+  artisan_id:z.string()
+})
+
+export type State = {
+  errors?: {
+    name?: string[];
+    category?: string[];
+    description?: string[];
+  };
+  message?: string | null;
+};
+
+const CreateProduct= ProductSchema.omit({ id: true});
+
+export async function createProduct(prevState: State, formData: FormData) {
+  // Validate form using Zod
+  const validatedFields = CreateProduct.safeParse({
+    name: formData.get('name'),
+    category: formData.get('category'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    image_url: formData.get('image_url'),
+    published: formData.get('published'),
+    artisan_id: formData.get('artisan_id'),
+  });
+ 
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Product.',
+    };
+  }
+ 
+  // Prepare data for insertion into the database
+  const { name,category,description,price,image_url,published, artisan_id} = validatedFields.data;
+
+  // Insert data into the database
+  try {
+    await sql`
+      INSERT INTO items (name,category,description,price,image_url,published,artisan_id)
+      VALUES (${name},${category},${description},${price},${image_url},${published},${artisan_id})
+    `;
+  } catch (error) {
+    
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
+ 
+
+  revalidatePath('/home/myproducts');
+  redirect('/home/myproducts');
+}
+
 const UserSchema = z.object({
   id: z.string().optional(),
   email: z.string(),
