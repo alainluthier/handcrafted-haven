@@ -1,19 +1,27 @@
 'use client';
 
-import Link from 'next/link';
+import { Item } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
-  PhotoIcon
+  PhotoIcon,
 } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import { Button } from '@/components/button';
-import { createProduct} from '@/app/lib/actions';
+import { updateProduct} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 
-export default function CreateProductForm({ artisanid }: { artisanid: string }) {
+export default function EditInvoiceForm({
+  product,
+  artisanid
+}: {
+  product: Item;
+  artisanid: string
+}) {
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createProduct, initialState);
+  const updateProductWithId = updateProduct.bind(null, product.id);
+  const [state, dispatch] = useFormState(updateProductWithId, initialState);
 
   return (
     <form action={dispatch}>
@@ -31,6 +39,7 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
               placeholder="Enter product name"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-4 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="name-error"
+              defaultValue={product.name}
             />
           </div>
           <div className="mb-4">
@@ -42,7 +51,7 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
               id="category"
               name="category"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-4 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue="jewerly"
+              defaultValue={product.category}
               aria-describedby="customer-error"
             >
               <option value="" disabled>
@@ -76,6 +85,7 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
               placeholder="Enter product name"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-4 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="customer-error"
+              defaultValue={product.description}
             />
           </div>
           <div id="description-error" aria-live="polite" aria-atomic="true">
@@ -99,6 +109,7 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
                 type="number"
                 step="0.01"
                 placeholder="Enter USD amount"
+                defaultValue={product.price}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
               />
@@ -128,10 +139,11 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="published"
+                  id="nopub"
                   name="published"
                   type="radio"
                   value="no published"
+                  defaultChecked={product.published===false}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -143,10 +155,11 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
               </div>
               <div className="flex items-center">
                 <input
-                  id="published"
+                  id="pub"
                   name="published"
                   type="radio"
                   value="published"
+                  defaultChecked={product.published===true}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -167,7 +180,7 @@ export default function CreateProductForm({ artisanid }: { artisanid: string }) 
         >
           Cancel
         </Link>
-        <Button type="submit">Create Product</Button>
+        <Button type="submit">Edit Product</Button>
       </div>
     </form>
   );
