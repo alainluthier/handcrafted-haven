@@ -53,8 +53,8 @@ export default async function ProductsTable({
                       <Image
                         src={product.image_url}
                         className="rounded-full"
-                        width={28}
-                        height={28}
+                        width={80}
+                        height={80}
                         alt={`${product.name}'s profile picture`}
                       />
                       <p>{product.name}</p>
