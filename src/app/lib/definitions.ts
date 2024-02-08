@@ -1,12 +1,4 @@
-export type User = {
-    id: string;
-    email: string;
-    role: string;
-    password: string;
-    name: string;
-    image_url: string;
-    phone: string;
-  };
+
 export type Item = {
   id:string,
   name:string,
@@ -17,3 +9,15 @@ export type Item = {
   published:boolean,
   artisan_id:string
 }
+export type User = {
+    id: string;
+    email: string;
+    role: 'customer'|'artisan';
+    password: string;
+    name: string;
+    image_url: string;
+    phone: string;
+};
+  
+
+
