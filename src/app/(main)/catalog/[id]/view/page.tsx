@@ -29,7 +29,7 @@ const reviews = { href: "#", average: 4, totalCount: 117 };
 export default async function Product({ params }: { params: { id: string } }) {
   const id = params.id;
   const product = await fetchProductById(id);
-  console.log(product)
+  //console.log(product)
   if (!product) {
     notFound();
   }
