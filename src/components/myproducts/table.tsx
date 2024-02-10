@@ -52,7 +52,6 @@ export default async function ProductsTable({
                     <div className="flex items-center gap-3">
                       <Image
                         src={product.image_url}
-                        className="rounded-full"
                         width={80}
                         height={80}
                         alt={`${product.name}'s profile picture`}
@@ -60,7 +59,7 @@ export default async function ProductsTable({
                       <p>{product.name}</p>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="line-clamp-3 px-3 py-3">
                     {product.description}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">

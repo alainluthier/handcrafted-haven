@@ -18,7 +18,7 @@ export default async function Page({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const session = await auth();
-  console.log(session);
+  //console.log(session);
   const totalPages = await fetchProductsPages(query,session?.user?.id||'-');
   
   return (
