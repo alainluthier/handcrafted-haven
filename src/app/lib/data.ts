@@ -14,7 +14,7 @@ import {
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   
     try {
-        console.log(userid);
+        //console.log(userid);
       const products = await sql<Item>`
         SELECT
           id,
@@ -76,15 +76,13 @@ import {
         FROM items
         WHERE id = ${id};
       `;
-  
+    const product = data.rows.map((product) => ({
+        ...product,
+        price: product.price / 100,
+      }));
       
-<<<<<<< HEAD
       //console.log(product); 
       return product[0];
-=======
-      console.log(data); // Invoice is an empty array []
-      return data;
->>>>>>> d01525efd3c754cd6e2a7265ba7b66a28c9d44ba
     } catch (error) {
       console.error('Database Error:', error);
       throw new Error('Failed to fetch product.');
