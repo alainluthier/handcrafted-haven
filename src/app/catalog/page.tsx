@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import CardItems from "@/app/ui/catalog/catalog";
-import CardItems2 from "@/app/ui/catalog/catalog_2";
 import Search from "@/app/ui/catalog/search";
 import { Suspense } from "react";
 import { ItemsSkeleton } from "@/app/ui/skeletons";
