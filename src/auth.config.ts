@@ -33,11 +33,18 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnHome = nextUrl.pathname.startsWith('/home');
+      const isOnCatalog = nextUrl.pathname.startsWith('/catalog');
       if (isOnHome) {
         if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/home', nextUrl));
+        return false; 
+      } else if(isOnCatalog){
+        if (isLoggedIn) return true;
+        return false; 
+      }else if (isLoggedIn) {
+        if (auth.user.role=='artisan')
+          return Response.redirect(new URL('/home', nextUrl));
+        else
+          return Response.redirect(new URL('/catalog', nextUrl));
       }
       return true;
     },

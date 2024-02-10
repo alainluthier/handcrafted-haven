@@ -12,7 +12,7 @@ import { Button } from '@/components/button';
 import { updateProduct} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 
-export default function EditInvoiceForm({
+export default function EditProductForm({
   product,
   artisanid
 }: {

@@ -1,3 +1,4 @@
+import { User } from './definitions';
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
@@ -80,10 +81,21 @@ import {
         price: product.price / 100,
       }));
       
-      //console.log(product); // Invoice is an empty array []
+      //console.log(product); 
       return product[0];
     } catch (error) {
       console.error('Database Error:', error);
       throw new Error('Failed to fetch product.');
+    }
+  }
+
+  export async function getUserById(id: string){
+    noStore();
+    try {
+      const user = await sql<User>`SELECT * FROM users_ WHERE id::text=${id}`;
+      return user.rows[0];
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      throw new Error('Failed to fetch user.');
     }
   }

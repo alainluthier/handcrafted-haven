@@ -39,6 +39,7 @@ export async function fetchFilteredProducts(
         items.image_url,
         items.published,
         items.artisan_id,
+        items.price,
         users_.email
       FROM items
       JOIN users_ ON items.artisan_id = users_.id
@@ -49,8 +50,11 @@ export async function fetchFilteredProducts(
       ORDER BY items.name DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-
-        return filteredProducts.rows;
+        const products = filteredProducts.rows.map((product) => ({
+            ...product,
+            price: product.price / 100,
+        }));
+        return products;
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch items.');
@@ -98,5 +102,116 @@ export async function fetchProductsPages(query: string) {
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch total number of products.');
+    }
+}
+
+
+
+export async function fetchProductsByCategory(
+    query: string,
+    currentPage: number,
+) {
+    noStore();
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    try {
+        const filteredProducts = await sql<ItemFiltered>`
+      SELECT
+        items.id,
+        items.name,
+        items.category,
+        items.description,
+        items.image_url,
+        items.published,
+        items.artisan_id,
+        items.price,
+        users_.email
+      FROM items
+      JOIN users_ ON items.artisan_id = users_.id
+      WHERE
+        items.category = ${`%${query}%`}
+      ORDER BY items.name DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+        const products = filteredProducts.rows.map((product) => ({
+            ...product,
+            price: product.price / 100,
+        }));
+        return products;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch items by category.');
+    }
+}
+
+
+export async function fetchProductsByPriceHight(
+    currentPage: number,
+) {
+    noStore();
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    try {
+        const filteredProducts = await sql<ItemFiltered>`
+      SELECT
+        items.id,
+        items.name,
+        items.category,
+        items.description,
+        items.image_url,
+        items.published,
+        items.artisan_id,
+        items.price,
+        users_.email
+      FROM items
+      JOIN users_ ON items.artisan_id = users_.id
+      ORDER BY items.price DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+        const products = filteredProducts.rows.map((product) => ({
+            ...product,
+            price: product.price / 100,
+        }));
+        return products;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch items by category.');
+    }
+}
+
+
+
+
+export async function fetchProductsByPriceLow(
+    currentPage: number,
+) {
+    noStore();
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    try {
+        const filteredProducts = await sql<ItemFiltered>`
+      SELECT
+        items.id,
+        items.name,
+        items.category,
+        items.description,
+        items.image_url,
+        items.published,
+        items.artisan_id,
+        items.price,
+        users_.email
+      FROM items
+      JOIN users_ ON items.artisan_id = users_.id
+      ORDER BY items.price ASC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+        const products = filteredProducts.rows.map((product) => ({
+            ...product,
+            price: product.price / 100,
+        }));
+        return products;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch items by category.');
     }
 }

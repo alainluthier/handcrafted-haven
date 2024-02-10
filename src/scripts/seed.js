@@ -20,7 +20,8 @@ async function seedUserTable(client) {
         password VARCHAR(255) NOT NULL,
         name varchar(255) not null,
         image_url varchar(500) null,
-        phone VARCHAR(20) NULL
+        phone VARCHAR(20) NULL,
+        history varchar(512) null
       );
     `;
 

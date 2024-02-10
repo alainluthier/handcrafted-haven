@@ -17,6 +17,7 @@ export type User = {
     name: string;
     image_url: string;
     phone: string;
+    history: string;
 };
   
 

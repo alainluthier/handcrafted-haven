@@ -87,7 +87,7 @@ export async function createProduct(prevState: State, formData: FormData) {
   } catch (error) {
     
     return {
-      message: 'Database Error: Failed to Create Invoice.',
+      message: 'Database Error: Failed to Create Product.',
     };
   }
  
@@ -96,23 +96,6 @@ export async function createProduct(prevState: State, formData: FormData) {
   redirect('/home/myproducts');
 }
 
-const UserSchema = z.object({
-  id: z.string().optional(),
-  email: z.string(),
-  role: z.enum(['customer', 'artisan']),
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
-  name: z.string(),
-  image_url: z.string().optional(),
-  phone: z.string().optional()
-}).superRefine(({ confirmPassword, password }, ctx) => {
-  if (confirmPassword !== password) {
-    ctx.addIssue({
-      code: "custom",
-      message: "The passwords did not match"
-    });
-  }
-});
 
 const UpdateProduct= ProductSchema.omit({ id: true});
 
@@ -151,7 +134,7 @@ export async function updateProduct(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Invoice.',
+      message: 'Missing Fields. Failed to Update Product.',
     };
   }
  
@@ -175,12 +158,32 @@ export async function updateProduct(
       `;
     }
   } catch (error) {
-    return { message: 'Database Error: Failed to Update Invoice.' };
+    return { message: 'Database Error: Failed to Update Product.' };
   }
  
   revalidatePath('/home/myproducts');
   redirect('/home/myproducts');
 }
+
+const UserSchema = z.object({
+  id: z.string().optional(),
+  email: z.string(),
+  role: z.enum(['customer', 'artisan']).optional(),
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+  name: z.string(),
+  image_url: z.string().optional(),
+  phone: z.string().optional(),
+  history: z.string().optional(),
+}).superRefine(({ confirmPassword, password }, ctx) => {
+  if (confirmPassword !== password) {
+    ctx.addIssue({
+      code: "custom",
+      message: "The passwords did not match"
+    });
+  }
+});
+
 
 export async function createUser(formData: FormData) {
   const { email, password, role, name } = UserSchema.parse({
@@ -197,6 +200,88 @@ export async function createUser(formData: FormData) {
   `;
 
   redirect('/login');
+}
+
+export async function updateUser(
+  id: string,
+  prevState: State,
+  formData: FormData,
+) {
+  
+  const file = formData.get("image_url") as File;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const filename =  file.name.replaceAll(" ", "_");
+  //console.log(filename);
+  try {
+    await writeFile(
+      path.join(process.cwd(), "public/artisans/" + filename),
+      buffer
+    );
+  } catch (error) {
+    console.log("Error occured ", error);
+    return {
+      message: 'Server Error: Failed to Upload File.',
+    };
+  }
+  const { email, password, confirmPassword,image_url, name ,phone, history} = UserSchema.parse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+    confirmPassword: formData.get('confirm-password'),
+    name: formData.get('name'),  
+    image_url: file.name!='undefined'?'/artisans/'+filename:'',
+    phone: formData.get('phone'),
+    id: formData.get('artisan_id'),
+    history: formData.get('history')
+  })
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  if (password!=confirmPassword) {
+    console.log(hashedPassword)
+    return {
+      message: 'Password error',
+    };
+  }
+ 
+  try {
+    if (image_url!='')
+    {
+      if(password!="passwordnochange"){
+        await sql`
+        UPDATE users_
+        SET name = ${name}, email = ${email}, password = ${password}, image_url = ${image_url}, phone = ${phone}, history? ${history}
+        WHERE id = ${id}
+        `;
+      }else{
+        await sql`
+        UPDATE users_
+        SET name = ${name}, email = ${email}, image_url = ${image_url}, phone = ${phone}, history? ${history}
+        WHERE id = ${id}
+      `;
+      }
+      
+    }
+    else{
+      if(password!="passwordnochange"){
+        await sql`
+        UPDATE users_
+        SET name = ${name}, email = ${email}, password = ${password}, phone = ${phone}, history? ${history}
+        WHERE id = ${id}
+        `;
+      }else{
+        await sql`
+        UPDATE users_
+        SET name = ${name}, email = ${email}, phone = ${phone}, history? ${history}
+        WHERE id = ${id}
+      `;
+      }
+    }
+  } catch (error) {
+    
+    return { message: 'Database Error: Failed to Update User.' };
+  }
+ 
+  revalidatePath('/home');
+  redirect('/home');
 }
 
 export async function authenticate(

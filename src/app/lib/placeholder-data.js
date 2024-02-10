@@ -25,7 +25,7 @@ const users = [
       name: 'Yaiza Ring',
       category: 'Jewelry',
       description: 'Beautiful clear zirconia crystals sit in a cluster build on this stunner of a ring and will add a little extra sparkle to your day and night.',
-      price: 99.99,
+      price: 1000,
       image_url: '',
       published: true,
       artisan_id: users[0].id

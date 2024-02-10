@@ -15,11 +15,6 @@ const links = [
         icon: ClipboardDocumentListIcon
     },
     {
-        name: 'Products',
-        href: '/home/products',
-        icon: BuildingStorefrontIcon,
-    },
-    {
         name: 'Profile',
         href: '/home/profile',
         icon: UserCircleIcon

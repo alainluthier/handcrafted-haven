@@ -1,34 +1,48 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ItemFiltered } from "@/app/lib/definitions_f";
-
 import {
-  fetchProducts,
   fetchFilteredProducts,
-  fetchProductById,
   fetchProductsByCategory,
   fetchProductsByPriceHight,
   fetchProductsByPriceLow,
 } from "@/app/lib/data_catalog";
+import { useRouter } from "next/router";
 
-export default async function CardItems({
+export default function CardItems2({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
-  }) {
-  
-  let listOfProducts : ItemFiltered[] | undefined;
+}) {
+  const routerQuery = useRouter().query;
 
-  if (query == "highToLow") {
-    listOfProducts = await fetchProductsByPriceHight(currentPage);
-  } else if (query == "LowToHigh") {
-    listOfProducts = await fetchProductsByPriceLow(currentPage);
-  } else {
-    listOfProducts = await fetchFilteredProducts(query, currentPage);
-  }
+  const [listOfProducts, setListOfProducts] = useState<ItemFiltered[]>([]);
+
+  // const listOfProducts = await fetchFilteredProducts(query, currentPage);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Llamar a la función correspondiente para obtener los productos filtrados u ordenados
+        let products;
+        if (routerQuery.filter === "priceHigh") {
+          products = await fetchProductsByPriceHight(currentPage);
+        } else if (routerQuery.filter === "priceLow") {
+          products = await fetchProductsByPriceLow(currentPage);
+        } else {
+          products = await fetchFilteredProducts(query, currentPage);
+        }
+        setListOfProducts(products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }
+
+    fetchData();
+  }, [query, currentPage]);
 
   return (
     <div className="bg-white">
@@ -44,8 +58,8 @@ export default async function CardItems({
                 <Image
                   src={product.image_url}
                   alt={`${product.name}'s picture`}
-                  width={600}
-                  height={600}
+                  width={60}
+                  height={65}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
               </div>
