@@ -7,18 +7,13 @@ import { redirect } from 'next/navigation';
 import { signIn } from '../../auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
-import { writeFile } from "fs/promises";
-import path from "path";
-import { NextResponse } from "next/server";
 
 const ProductSchema = z.object({
   id:z.string(),
   name:z.string(),
   category:z.string(),
   description:z.string(),
-  price: z.coerce
-  .number()
-  .gt(0, { message: 'Please enter an amount greater than $0.' }),
+  price:z.number(),
   image_url:z.string(),
   published:z.boolean(),
   artisan_id:z.string()
@@ -27,6 +22,7 @@ const ProductSchema = z.object({
 export type State = {
   errors?: {
     name?: string[];
+    category?: string[];
     description?: string[];
   };
   message?: string | null;
@@ -35,54 +31,33 @@ export type State = {
 const CreateProduct= ProductSchema.omit({ id: true});
 
 export async function createProduct(prevState: State, formData: FormData) {
-  
-  const file = formData.get("image_url") as File;
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const filename =  file.name.replaceAll(" ", "_");
-  //console.log(filename);
-  try {
-    await writeFile(
-      path.join(process.cwd(), "public/products/" + filename),
-      buffer
-    );
-  } catch (error) {
-    console.log("Error occured ", error);
-    return {
-      message: 'Server Error: Failed to Upload File.',
-    };
-  }
-  //console.log(file)
   // Validate form using Zod
   const validatedFields = CreateProduct.safeParse({
     name: formData.get('name'),
     category: formData.get('category'),
     description: formData.get('description'),
     price: formData.get('price'),
-    image_url: file.name!='undefined'?'/products/'+filename:'/products/noimage.png',
-    published: formData.get('published')=='published'?true:false,
+    image_url: formData.get('image_url'),
+    published: formData.get('published'),
     artisan_id: formData.get('artisan_id'),
   });
  
-  
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Product.',
     };
   }
  
-
   // Prepare data for insertion into the database
   const { name,category,description,price,image_url,published, artisan_id} = validatedFields.data;
-  const priceInCents = price * 100;
+
   // Insert data into the database
   try {
     await sql`
       INSERT INTO items (name,category,description,price,image_url,published,artisan_id)
-      VALUES (${name},${category},${description},${priceInCents},${image_url},${published},${artisan_id})
+      VALUES (${name},${category},${description},${price},${image_url},${published},${artisan_id})
     `;
   } catch (error) {
     
@@ -97,8 +72,8 @@ export async function createProduct(prevState: State, formData: FormData) {
 }
 
 
-const UpdateProduct= ProductSchema.omit({ id: true});
 
+<<<<<<< HEAD
 export async function updateProduct(
   id: string,
   prevState: State,
@@ -164,6 +139,8 @@ export async function updateProduct(
   revalidatePath('/home/myproducts');
   redirect('/home/myproducts');
 }
+=======
+>>>>>>> d01525efd3c754cd6e2a7265ba7b66a28c9d44ba
 
 const UserSchema = z.object({
   id: z.string().optional(),

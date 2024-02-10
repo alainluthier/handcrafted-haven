@@ -51,7 +51,7 @@ export const authConfig = {
     async jwt({ token, user }) {
       if (user) {
         if(user.email!=null){
-          //console.log(user.email)
+          console.log(user.email)
           token.user = await getUser(user.email|| '')
         }else{
           token.user=user;
