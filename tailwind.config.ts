@@ -23,6 +23,11 @@ module.exports = {
           100: "rgba(59,60,152,0.02)",
         },
         grey: "#747A88",
+        "p-orange": "#CC6D00",
+        "p-black": "#28262C",
+        "p-white": "#EBF2FA",
+        "p-green": "#97CE5C",
+        "p-beige": "#FFF6B5",
       },
       backgroundImage: {
         'pattern': "url('/pattern.png')",
@@ -30,5 +35,8 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [require("daisyui"), require('@tailwindcss/aspect-ratio')],
+  daisyui: {
+    themes: [],
+  }
 };
